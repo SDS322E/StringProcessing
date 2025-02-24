@@ -2,6 +2,9 @@
 
 library(tidyverse)
 
+## In what US states are WCA competitions held?
+
+## Read in WCA competitions data
 competitions <- read_tsv("WCA_export_Competitions.tsv.bz2")
 
 ## Look at top of data frame
@@ -42,7 +45,7 @@ competitions |>
                       "Austin, TX|Austin, Texas|Austin TX|Austin Texas")) |>
     select(name, venueAddress, year)
 
-## Find competitions in Baltimore, MD
+## Find competitions in Houston, MD
 
 
 
@@ -124,8 +127,10 @@ competitions |>
     mutate(state = str_replace(state, ",$", "")) |>
     filter(state %in% state.name
            | state %in% state.abb) |>
-    ggplot(aes(y = state)) +
-    geom_bar()
+    group_by(state) |>
+    summarize(n = n()) |>
+    ggplot(aes(x = n, y = state)) +
+    geom_col()
 
 
 
